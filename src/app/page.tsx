@@ -114,40 +114,41 @@ export default function HomePage() {
     })
   }
 
-  // (gameState && gameState.state === 'in_progress') ?
+  // (true) ?
   return (
-    (true) ?
-    (<main style={{ padding: 20 }}>
-      <h1>🚀 Ronda {round}</h1>
-      
-      <div className="flex">
-        <section>
-            <Image src="/img/boards/1.png" alt="" width={800} height={600} />
-        </section>
+    (gameState && gameState.state === 'in_progress') ?
+    (
+      <main style={{ padding: 20 }}>
+        <h1>🚀 Ronda {round}</h1>
+        
+        <div className="flex">
+          <section>
+              <Image src="/img/boards/1.png" alt="" width={800} height={600} />
+          </section>
 
-        <section style={{ marginTop: 40 }}>
-          <h2>🃏 Pilas disponibles</h2>
-          <div className="flex flex-col">
-            {piles.map((pile: Pile, index: number) => (
-              <div key={index} style={{ border: '1px solid #ccc', padding: 10 }}>
-                <p>Número: {pile.number}</p>
-                <p>Icono: {iconsPile[pile.icon]}</p>
-                <button onClick={() => selectPile(index)}>Elegir esta</button>
+          <section style={{ marginTop: 40 }}>
+            <h2>🃏 Pilas disponibles</h2>
+            <div className="flex flex-col">
+              {piles.map((pile: Pile, index: number) => (
+                <div key={index} style={{ border: '1px solid #ccc', padding: 10 }}>
+                  <p>Número: {pile.number}</p>
+                  <p>Icono: {iconsPile[pile.icon]}</p>
+                  <button onClick={() => selectPile(index)}>Elegir esta</button>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section style={{ marginTop: 40 }}>
+            <h2>📊 Estado del juego</h2>
+            {gameState?.players?.map((p: PlayerState) => (
+              <div key={p.id}>
+                {p.name} — {p.hasChosen ? '✅ Ya eligió' : '⏳ Esperando'}
               </div>
             ))}
-          </div>
-        </section>
-
-        <section style={{ marginTop: 40 }}>
-          <h2>📊 Estado del juego</h2>
-          {gameState?.players?.map((p: PlayerState) => (
-            <div key={p.id}>
-              {p.name} — {p.hasChosen ? '✅ Ya eligió' : '⏳ Esperando'}
-            </div>
-          ))}
-        </section>
-      </div>
-    </main>
+          </section>
+        </div>
+      </main>
     )
     : (
       <main>
