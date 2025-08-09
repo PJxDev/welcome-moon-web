@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from "react"
+import Image from 'next/image'
 import socket from '@/lib/socket';
 
 type Icon =
@@ -61,6 +62,16 @@ type PublicState = {
 type ACK = { ok: boolean, error: string }
 
 
+const iconsPile = {
+  astronaut: '👩🏽‍🚀',
+  water: '💧',
+  robot: '🤖',
+  calendar: '📅',
+  lightning: '⚡',
+  plant: '🌱',
+  wildcard: '📀',
+}
+
 export default function HomePage() {
 
   const [round, setRound] = useState(0)
@@ -103,68 +114,45 @@ export default function HomePage() {
     })
   }
 
+  // (gameState && gameState.state === 'in_progress') ?
   return (
-    (gameState && gameState.state === 'in_progress') ?
+    (true) ?
     (<main style={{ padding: 20 }}>
       <h1>🚀 Ronda {round}</h1>
+      
+      <div className="flex">
+        <section>
+            <Image src="/img/boards/1.png" alt="" width={800} height={600} />
+        </section>
 
-      <section>
-        <h2>Tu tablero</h2>
-        <div style={{ display: 'flex', gap: 20 }}>
-          {board &&
-            board.rooms.map((room: Room, roomIndex: number) => (
-            <div key={roomIndex}>
-              <h3>Habitación {roomIndex + 1}</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 60px)', gap: 10 }}>
-                {room.cells.map((cell: Cell, cellIndex: number) => {
-                  const isSelected =
-                    selectedCell?.roomIndex === roomIndex && selectedCell?.cellIndex === cellIndex
-                  return (
-                    <button
-                      key={cellIndex}
-                      onClick={() => setSelectedCell({ roomIndex, cellIndex })}
-                      style={{
-                        height: 60,
-                        background: isSelected ? '#4caf50' : '#eee',
-                        border: '1px solid #ccc',
-                      }}
-                    >
-                      {cell?.value ?? '-'} <br />
-                    </button>
-                  )
-                })}
+        <section style={{ marginTop: 40 }}>
+          <h2>🃏 Pilas disponibles</h2>
+          <div className="flex flex-col">
+            {piles.map((pile: Pile, index: number) => (
+              <div key={index} style={{ border: '1px solid #ccc', padding: 10 }}>
+                <p>Número: {pile.number}</p>
+                <p>Icono: {iconsPile[pile.icon]}</p>
+                <button onClick={() => selectPile(index)}>Elegir esta</button>
               </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section style={{ marginTop: 40 }}>
-        <h2>🃏 Pilas disponibles</h2>
-        <div style={{ display: 'flex', gap: 20 }}>
-          {piles.map((pile: Pile, index: number) => (
-            <div key={index} style={{ border: '1px solid #ccc', padding: 10 }}>
-              <p>Número: {pile.number}</p>
-              <p>Icono: {pile.icon}</p>
-              <button onClick={() => selectPile(index)}>Elegir esta</button>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section style={{ marginTop: 40 }}>
-        <h2>📊 Estado del juego</h2>
-        {gameState?.players?.map((p: PlayerState) => (
-          <div key={p.id}>
-            {p.name} — {p.hasChosen ? '✅ Ya eligió' : '⏳ Esperando'}
+            ))}
           </div>
-        ))}
-      </section>
-      </main>)
-      : (
-        <main>
-          <button onClick={() => startGame()}>Iniciar Partida</button>
-        </main>
-      )
+        </section>
+
+        <section style={{ marginTop: 40 }}>
+          <h2>📊 Estado del juego</h2>
+          {gameState?.players?.map((p: PlayerState) => (
+            <div key={p.id}>
+              {p.name} — {p.hasChosen ? '✅ Ya eligió' : '⏳ Esperando'}
+            </div>
+          ))}
+        </section>
+      </div>
+    </main>
+    )
+    : (
+      <main>
+        <button onClick={() => startGame()}>Iniciar Partida</button>
+      </main>
+    )
   )
 }
