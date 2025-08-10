@@ -30,7 +30,7 @@ export function useLobbySocket(onJoinRoom: (roomId?: string) => void) {
 
   const createRoom = () => {
     socket.emit('createRoom', {}, (ack: ACK & { roomId?: string }) => {
-      if (!ack.ok) return alert('Error al crear la sala');
+      if (!ack.ok) return alert(ack.error);
       onJoinRoom(ack.roomId);
     });
   };
