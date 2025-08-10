@@ -1,3 +1,5 @@
+'use client'
+
 import { ACK, Board, Pile, PlayerState, PublicState } from '@/app/types'
 import socket from '@/lib/socket'
 import Image from 'next/image'

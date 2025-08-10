@@ -1,3 +1,5 @@
+'use client'
+
 import Room from './components/Room';
 import GameBoard from './components/GameBoard';
 import { useState } from 'react';

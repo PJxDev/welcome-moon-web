@@ -1,3 +1,5 @@
+'use client'
+
 import { PlayerList } from './PlayerList';
 import { StartGameButton } from './StartGameButton';
 import { RoomHeader } from './RoomHeader';
