@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { useEffect, useState } from 'react';
 import socket from '@/lib/socket';
 import { ACK, RoomSummary } from '@/app/types';
@@ -29,7 +30,10 @@ export function useLobbySocket(onJoinRoom: (roomId?: string) => void) {
   };
 
   const createRoom = () => {
-    socket.emit('createRoom', {}, (ack: ACK & { roomId?: string }) => {
+    // genera algo como 'f47ac10b-58cc-4372-a567-0e02b2c3d479'
+    const roomId = uuidv4();
+    
+    socket.emit('createRoom', {roomId}, (ack: ACK & { roomId?: string }) => {
       if (!ack.ok) return alert(ack.error);
       onJoinRoom(ack.roomId);
     });
