@@ -2,16 +2,16 @@ import { useEffect, useState } from 'react';
 import socket from '@/lib/socket';
 import { ACK, Player } from '@/app/types';
 
-export function useRoomSocket(roomId: string | null, onStartGame: () => void) {
+export function useRoomSocket(onStartGame: () => void) {
   const [players, setPlayers] = useState<Player[]>([]);
+  const [roomId, setRoomId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!roomId) return;
-
-    socket.on('state', (state) => {
-      if (state.roomId === roomId) {
-        setPlayers(state.players);
-      }
+    socket.on('requestState', (ack) => {
+      if (!ack.ok) return alert(ack.error)
+      const {state} = ack
+      setPlayers(state.players);
+      setRoomId(state.roomId);
     });
 
     socket.on('playerJoined', ({ playerId, name }) => {
@@ -25,7 +25,7 @@ export function useRoomSocket(roomId: string | null, onStartGame: () => void) {
     });
 
     return () => {
-      socket.off('state');
+      socket.off('requestState');
       socket.off('playerJoined');
       socket.off('playerDisconnected');
     };
@@ -39,5 +39,5 @@ export function useRoomSocket(roomId: string | null, onStartGame: () => void) {
     });
   };
 
-  return { players, startGame };
+  return { players, startGame, roomId };
 }
