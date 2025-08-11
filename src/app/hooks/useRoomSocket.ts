@@ -10,6 +10,7 @@ export function useRoomSocket(onStartGame: () => void) {
     socket.on('requestState', (ack) => {
       if (!ack.ok) return alert(ack.error)
       const { state } = ack
+      console.log({ack})
       setPlayers(state.players);
       setRoomId(state.roomId);
     });
