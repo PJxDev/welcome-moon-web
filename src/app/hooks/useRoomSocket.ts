@@ -9,7 +9,7 @@ export function useRoomSocket(onStartGame: () => void) {
   useEffect(() => {
     socket.on('requestState', (ack) => {
       if (!ack.ok) return alert(ack.error)
-      const {state} = ack
+      const { state } = ack
       setPlayers(state.players);
       setRoomId(state.roomId);
     });

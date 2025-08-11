@@ -4,7 +4,7 @@ import { ACK, RoomSummary } from '@/app/types';
 import { v4 as uuidv4 } from 'uuid';
 
 
-export function useLobbySocket(onJoinRoom: (roomId?: string) => void) {
+export function useLobbySocket(onJoinRoom: () => void ) {
   const [availableRooms, setAvailableRooms] = useState<RoomSummary[]>([]);
   const [inputRoom, setInputRoom] = useState('');
 
@@ -31,18 +31,21 @@ export function useLobbySocket(onJoinRoom: (roomId?: string) => void) {
   };
 
   const createRoom = () => {
-    const roomId = uuidv4();
-    socket.emit('createRoom', {roomId}, (ack: ACK & { roomId?: string }) => {
+    socket.emit('createRoom', (ack: ACK) => {
       if (!ack.ok) return alert(ack.error);
-      onJoinRoom(ack.roomId);
+      console.log({ ack })
+      setInputRoom(ack.roomId)
+      onJoinRoom();
     });
+
   };
+  
   
 
   const joinRoom = (roomId: string) => {
     socket.emit('joinRoom', { roomId }, (ack: ACK) => {
       if (!ack.ok) return alert('Error al unirse a la sala');
-      onJoinRoom(roomId);
+      onJoinRoom();
     });
   };
 

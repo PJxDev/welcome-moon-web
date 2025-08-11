@@ -1,4 +1,4 @@
-export type ACK = { ok: boolean; error: string; rooms: RoomSummary[] }
+export type ACK = { ok: boolean; error: string; rooms: RoomSummary[]; roomId:string }
 export type Player = {
   id: string
   name: string
