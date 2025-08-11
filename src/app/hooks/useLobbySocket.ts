@@ -31,13 +31,16 @@ export function useLobbySocket(onJoinRoom: () => void ) {
   };
 
   const createRoom = () => {
+    let roomId 
     socket.emit('createRoom', (ack: ACK) => {
       if (!ack.ok) return alert(ack.error);
       console.log({ ack })
       setInputRoom(ack.roomId)
-      onJoinRoom();
+      roomId = ack.roomId
+      onJoinRoom()
     });
 
+    socket.emit('getState', { roomId });
   };
   
   
